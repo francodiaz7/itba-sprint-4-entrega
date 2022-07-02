@@ -1,2 +1,2 @@
-NroCheque;CodigoBanco;CodigoSucursal;NumeroCuentaOrigen;NumeroCuentaDestino;Valor;FechaOrigen;FechaPago;DNI;Estado
-000000,100,300,"cuenta origen","cuenta destino","valor $","30-06-2022","01-07-2022",44111222,"APROBADO"
+NroCheque;CodigoBanco;CodigoSucursal;NumeroCuentaOrigen;NumeroCuentaDestino;Valor;FechaOrigen;FechaPago;DNI;Tipo;Estado
+000000,100,300,cuenta origen,cuenta destino,valor,30-06-2022,"01-07-2022",44111222,EMITIDO,APROBADO
