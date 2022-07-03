@@ -17,10 +17,9 @@ def salidaPorCsv(tipoDeSalida,dniCliente):
     fechaActualFormato = datetime.datetime.strftime(fechaActual, '%d %m %Y  %Hhs %Mmin %Sseg')
     dni= dniCliente
     nombreDeArchivocsv= str("DNI "+dni+" "+fechaActualFormato)
-    new_file=[]
+    resultado=[]
     csv_salida = tipoDeSalida
     csv_file = csv.reader(open(archivo, 'r'))
-<<<<<<< HEAD
     for row in csv_file:
         if dni==row[8] and tipoCheque==row[9]:
             resultado.append(row)
@@ -73,21 +72,6 @@ def tipoDeSalida(resultado):
         print('Tipo de salida no reconocido.')
 
 #Aca empieza el codigo y la lógica.
-=======
-    header = next(csv_file)
-    if csv_salida == "CSV":
-        for row in csv_file:
-            if dni==row[8] and tipoCheque==row[9]:
-                new_file.append(row)
-                new_file.append(row[3:8])
-                with open(nombreDeArchivocsv+".csv", 'w', newline='') as cf:
-                    writer = csv.writer(cf, delimiter=',')
-                    writer.writerow(header[3:8])
-                    writer.writerows(new_file[3:8])
-            elif dni==row[8] and tipoCheque!=row[9]:
-                print("Error! El tipo de cheque es incorrecto.")
-                  
->>>>>>> 793573b9f4ac662dee4b07bb4dc6f2ef12c30928
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
