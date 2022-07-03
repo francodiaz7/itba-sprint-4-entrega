@@ -1,31 +1,26 @@
 import csv
 import sys
 import datetime
-import time
 
-
-#Falta guardar por csv (2c y 4), poder filtrar por fecha (2f), y mostrar error por pantala (3)
-#A considerar
-#sys.argv guarda todos los argumentos
-#sys.argv[0] regresa el nombre del script, por lo tanto el lenght de sys.argv se incrementa
-
-#Se definen funciones para filtrar las filas en el archivo csv
-
-#Al usar with open(...) cierra el archivo. Mientras que las otras funciones no (a confirmar).
-def buscarPorAlternativa():
-    resultado = []
-    with open(archivo, 'r', newline='') as f:
-        reader = csv.reader(f)
-        #La linea de abajo saltea el header
-        next(reader, None)
-        for row in reader:
-            if dni==row[8] and tipoCheque==row[9]:
-                resultado.append(row)
-        return resultado
-
-def buscarPorDniTipo():
-    resultado = []
+def salidaPorPantalla(tipoDeSalida):
+    csv_salida = tipoDeSalida
     csv_file = csv.reader(open(archivo, 'r'))
+    if csv_salida == "PANTALLA":
+        for row in csv_file:
+            if dni==row[8] and tipoCheque==row[9]:
+                print(row[:10])
+            elif dni==row[8] and tipoCheque!=row[9]:
+                print("Error! El tipo de cheque es incorrecto.")
+
+def salidaPorCsv(tipoDeSalida,dniCliente):
+    fechaActual = datetime.datetime.now()
+    fechaActualFormato = datetime.datetime.strftime(fechaActual, '%d %m %Y  %Hhs %Mmin %Sseg')
+    dni= dniCliente
+    nombreDeArchivocsv= str("DNI "+dni+" "+fechaActualFormato)
+    new_file=[]
+    csv_salida = tipoDeSalida
+    csv_file = csv.reader(open(archivo, 'r'))
+<<<<<<< HEAD
     for row in csv_file:
         if dni==row[8] and tipoCheque==row[9]:
             resultado.append(row)
@@ -55,36 +50,7 @@ def buscarPorDniTipoEstadoFecha():
         if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
             resultado.append(row)
     return resultado
-''' ITEM 3 VERIFICAR CODIGO
-def listaCheques():
-    # Crea una lista de cheques para un número de dni
-    
-    csv_file = csv.reader(open(archivo, 'r'))
-    for row in csv_file:
-        cheques = []
-        if dni == row[8]:
-            cheque = row[1]
-            while cheque != '':
-                cheques.append(cheque)
-                cheque = row[1]
-    return cheques
 
-def chequeRepetido(lista):
-    #La función busca si para un número de DNI hay cheques repetidos.
-    #En caso afirmativo muestra un error por pantalla.
-    
-    listaCheques()
-    repetidos = []
-    unicos = []
-    for x in lista:
-        if x not in unicos:
-            unicos.append(x)
-        elif x not in repetidos:
-            repetidos.append(x)
-
-    if len(repetidos) == 0:
-        print('ERROR')
-'''
 
 #Falta la opción para crear un archivo CSV
 
@@ -107,55 +73,36 @@ def tipoDeSalida(resultado):
         print('Tipo de salida no reconocido.')
 
 #Aca empieza el codigo y la lógica.
+=======
+    header = next(csv_file)
+    if csv_salida == "CSV":
+        for row in csv_file:
+            if dni==row[8] and tipoCheque==row[9]:
+                new_file.append(row)
+                new_file.append(row[3:8])
+                with open(nombreDeArchivocsv+".csv", 'w', newline='') as cf:
+                    writer = csv.writer(cf, delimiter=',')
+                    writer.writerow(header[3:8])
+                    writer.writerows(new_file[3:8])
+            elif dni==row[8] and tipoCheque!=row[9]:
+                print("Error! El tipo de cheque es incorrecto.")
+                  
+>>>>>>> 793573b9f4ac662dee4b07bb4dc6f2ef12c30928
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print("Es obligatorio colocar al menos cuatro argumentos")
+        print("-Debes ingresar primero el nombre del archivo csv.\n-Despues el DNI del cliente.\n-Despues la forma de salida que puede ser: PANTALLA O CSV.\n-Despues el tipo de cheque que puede ser: EMITIDO O DEPOSITADO\n Ejemplo: test.csv 42180335 PANTALLA EMITIDO ")
 
-    #Guarda los valores de los argumentos
-    if len(sys.argv) >= 5:
+    if len(sys.argv) == 5:
         archivo = sys.argv[1]
         dni = sys.argv[2]
         salida = sys.argv[3]
         tipoCheque = sys.argv[4]
+        print(archivo, dni, salida, tipoCheque)
+        salidaPorPantalla(salida)
+        salidaPorCsv(salida,dni)
 
-    if len(sys.argv) == 5:
-        # mostrar = buscarPorAlternativa()
-        # tipoDeSalida(mostrar)
-        resultado = buscarPorDniTipo()
-        tipoDeSalida(resultado)
-
-    if len(sys.argv) == 6:
-        arg = sys.argv[5]
-        if arg == "PENDIENTE" or arg == "APROBADO" or arg == "RECHAZADO":
-            estadoCheque = sys.argv[5]
-        else:
-            rangoFecha = sys.argv[5]
-        resultado = buscarPorDniTipoEstado()
-        tipoDeSalida(resultado)
-
-    if len(sys.argv) == 7:
+    if 2 == 1: # Argumentos opcionales
         estadoCheque = sys.argv[5]
         rangoFecha = sys.argv[6]
-        resultado = buscarPorDniTipoEstadoFecha()
-        tipoDeSalida(resultado)
-
-    #Desde acá hasta abajo el código solo está con motivos de posibles opciones.
-    
-    """
-    #Itera sobre todos los argumentos
-    for arg in sys.argv:
-        if (arg == "-h" or arg == "-help" or arg == "--help"):
-            print("Ejecutar este codigo\
-                \n-h, -help, --help: Aparece este menú\
-                \ntime: Imprime la fecha actual (experimento)")
-
-        # imprime tiempo actual
-
-        if (arg == "time"):
-            fechaActual = datetime.datetime.now()
-            fechaActualFormato = datetime.datetime.strftime(fechaActual, '%d-%m-%Y %H:%M:%S')
-            # https://strftime.org
-            print(fechaActual)
-            print(fechaActualFormato)
-    """
