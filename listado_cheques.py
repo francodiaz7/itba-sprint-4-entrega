@@ -1,6 +1,8 @@
 import csv
 import sys
 import datetime
+import time
+
 
 #Falta guardar por csv (2c y 4), poder filtrar por fecha (2f), y mostrar error por pantala (3)
 #A considerar
@@ -44,6 +46,12 @@ def buscarPorDniTipoEstadoFecha():
     resultado = []
     csv_file = csv.reader(open(archivo, 'r'))
     for row in csv_file:
+        ''' EJEMPLO CÓDIGO FECHAS USANDO TIMESTAMP
+         ts_now = time.time()
+         dt_now = datetime.fromtimestamp(ts_now)
+        '''
+
+        #creo que acá hay que buscar el estado del cheque para la fecha actual, no sé si me equivoco
         if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
             resultado.append(row)
     return resultado
@@ -55,6 +63,16 @@ def tipoDeSalida(resultado):
         print(resultado)
     elif salida == "CSV":
         print('Preparando archivo...')
+        """
+        csv_file = csv.reader(open(archivo, 'r'))
+        with open('<DNI><TIMESTAMP>.csv', 'w') as csvfile:
+            datos = ['nro_cuenta', 'start_date', 'end_date', 'valor_cheque']
+            writer = csv.DictWriter(csvfile, datos = datos)
+
+            writer.writeheader()
+            for row in cvs_file:
+                writer.writerow('nro_cuenta': row[5], 'start_date': row[7], 'end_date': datetime.now(), 'valor_cheque': row[6])
+        """
     else:
         print('Tipo de salida no reconocido.')
 
