@@ -10,9 +10,9 @@ def buscarPorDniTipo():
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
         next(reader, None)
-        for row in reader:
-            if dni==row[8] and tipoCheque==row[9]:
-                resultado.append(row)
+        for fila in reader:
+            if dni==fila[8] and tipoCheque==fila[9]:
+                resultado.append(fila)
         return resultado
 
 def buscarPorDniTipoEstado():
@@ -20,9 +20,9 @@ def buscarPorDniTipoEstado():
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
         next(reader, None)
-        for row in reader:
-            if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
-                resultado.append(row)
+        for fila in reader:
+            if dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
+                resultado.append(fila)
         return resultado
 
 def buscarPorDniTipoEstadoFecha():
@@ -40,9 +40,9 @@ def buscarPorDniTipoEstadoFecha():
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
         next(reader, None)
-        for row in reader:
-            if fechaUno<int(row[6]) and fechaDos>int(row[7]) and dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
-                resultado.append(row)
+        for fila in reader:
+            if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
+                resultado.append(fila)
     return resultado
 
 ''' ITEM 3 VERIFICAR CODIGO
@@ -50,13 +50,13 @@ def listaCheques():
     # Crea una lista de cheques para un número de dni
     
     csv_file = csv.reader(open(archivo, 'r'))
-    for row in csv_file:
+    for fila in csv_file:
         cheques = []
-        if dni == row[8]:
-            cheque = row[1]
+        if dni == fila[8]:
+            cheque = fila[1]
             while cheque != '':
                 cheques.append(cheque)
-                cheque = row[1]
+                cheque = fila[1]
     return cheques
 
 def chequeRepetido():
@@ -81,8 +81,8 @@ def tipoDeSalida(resultado):
         if not resultado:
             print('No hay resultados que cumplan esas condiciones...')
         else:
-            for row in resultado:
-                print(row)
+            for fila in resultado:
+                print(fila)
     elif salida == "CSV":
         if not resultado:
             print('No hay resultados que cumplan esas condiciones...')
