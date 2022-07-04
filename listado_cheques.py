@@ -14,7 +14,7 @@ def buscarPorDniTipo():
         for fila in reader:
             if dni==fila[8] and tipoCheque==fila[9]:
                 resultado.append(fila)
-        return resultado
+    return resultado
 
 def buscarPorDniTipoEstado():
     #Devuelve una lista con los resultados de
@@ -26,7 +26,7 @@ def buscarPorDniTipoEstado():
         for fila in reader:
             if dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
                 resultado.append(fila)
-        return resultado
+    return resultado
 
 def cambiarFecha():
     #cambia las fechas de formato string a timestamp
