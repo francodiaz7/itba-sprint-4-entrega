@@ -41,7 +41,7 @@ def buscarPorDniTipoEstadoFecha():
         reader = csv.reader(file)
         next(reader, None)
         for row in reader:
-            if fechaUno<row[6] and fechaDos>row[7] and dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
+            if fechaUno<int(row[6]) and fechaDos>int(row[7]) and dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
                 resultado.append(row)
     return resultado
 
