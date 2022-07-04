@@ -48,36 +48,22 @@ def buscarPorDniTipoEstadoFecha():
                 resultado.append(fila)
     return resultado
 
-''' ITEM 3 VERIFICAR CODIGO
-def listaCheques():
-    # Crea una lista de cheques para un número de dni
-    
-    csv_file = csv.reader(open(archivo, 'r'))
-    for fila in csv_file:
-        cheques = []
-        if dni == fila[8]:
-            cheque = fila[1]
-            while cheque != '':
-                cheques.append(cheque)
-                cheque = fila[1]
-    return cheques
-
 def chequeRepetido():
-    #La función busca si para un número de DNI hay cheques repetidos.
-    #En caso afirmativo muestra un error por pantalla.
-    
-    nc = listaCheques()
+    #La funcion busca si dentro del resultado hay un cheque repetido.
+    #Si hay alguno imprime error por pantalla indicando el número de cheque.
     repetidos = []
     unicos = []
-    for x in nc:
-        if x not in unicos:
-            unicos.append(x)
-        elif x not in repetidos:
-            repetidos.append(x)
-
+    for fila in resultado:
+        cheque = fila[0]
+        if cheque not in unicos:
+            unicos.append(cheque)
+        elif cheque not in repetidos:
+            repetidos.append(cheque)
     if len(repetidos) == 0:
-        print('ERROR')
-'''
+        return False
+    else:
+        for error in repetidos:
+            print('Error, el cheque número {0} está repetido.'.format(error))
 
 def descargar():
     #Guarda el header del archivo csv
