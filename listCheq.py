@@ -74,7 +74,8 @@ def chequeRepetido():
 
 def tipoDeSalida(resultado):
     if salida == "PANTALLA":
-        print(resultado)
+        for row in resultado:
+            print(row[:10])
     elif salida == "CSV":
         print('Preparando archivo...')
         """
@@ -95,6 +96,7 @@ def tipoDeSalida(resultado):
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print("Es obligatorio colocar al menos cuatro argumentos")
+        print("-Debes ingresar primero el nombre del archivo csv.\n-Despues el DNI del cliente.\n-Despues la forma de salida que puede ser: PANTALLA O CSV.\n-Despues el tipo de cheque que puede ser: EMITIDO O DEPOSITADO\n Ejemplo: test.csv 42180335 PANTALLA EMITIDO ")
 
     #Guarda los valores de los argumentos
     if len(sys.argv) >= 5:
