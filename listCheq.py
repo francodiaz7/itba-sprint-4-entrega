@@ -62,7 +62,7 @@ def chequeRepetido():
         return False
     else:
         for error in repetidos:
-            print('Error, el cheque número {0} está repetido.'.format(error))
+            print('Error, el cheque número {0} del dni {1} está repetido.'.format(error, dni))
 
 def descargar():
     #Guarda el header del archivo csv
