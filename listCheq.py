@@ -106,7 +106,14 @@ def tipoDeSalida(resultado):
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print("Es obligatorio colocar al menos cuatro argumentos")
-        print("-Debes ingresar primero el nombre del archivo csv.\n-Despues el DNI del cliente.\n-Despues la forma de salida que puede ser: PANTALLA O CSV.\n-Despues el tipo de cheque que puede ser: EMITIDO O DEPOSITADO\n Ejemplo: test.csv 42180335 PANTALLA EMITIDO ")
+        print("El orden de los argumentos son los siguientes:\
+        \n  a. Nombre del archivo csv.\
+        \n  b. DNI del cliente donde se filtraran.\
+        \n  c. Salida: PANTALLA o CSV.\
+        \n  d. Tipo de cheque: EMITIDO o DEPOSITADO.\
+        \n  e. Estado del cheque: PENDIENTE, APROBADO, RECHAZADO. (Opcional)\
+        \n  f. Rango fecha: xx-xx-xxxx:yy-yy-yyyy. (Opcional)\
+        \nEjemplo: >python listado_cheques.py test.csv 42180335 PANTALLA EMITIDO")
 
     #Guarda los valores de los argumentos ingresados por consola.
     if len(sys.argv) >= 5:
