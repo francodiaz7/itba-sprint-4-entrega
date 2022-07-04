@@ -62,7 +62,7 @@ def chequeRepetido():
         return False
     else:
         for error in repetidos:
-            print('Error, el cheque número {0} del dni {1} está repetido.'.format(error, dni))
+            print('Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
 
 def descargar():
     #Guarda el header del archivo csv
@@ -91,10 +91,12 @@ def tipoDeSalida(resultado):
         print('No hay resultados que cumplan esas condiciones...')
     #Imprime por pantalla las filas del resultado.
     elif salida == "PANTALLA":
+        chequeRepetido()
         for fila in resultado:
             print(fila)
     #Descarga las filas en un nuevo archivo.
     elif salida == "CSV":
+        chequeRepetido()
         print('Preparando archivo...')
         descargar()
     else:
