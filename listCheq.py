@@ -70,14 +70,14 @@ def listaCheques():
                 cheque = row[1]
     return cheques
 
-def chequeRepetido(lista):
+def chequeRepetido():
     #La función busca si para un número de DNI hay cheques repetidos.
     #En caso afirmativo muestra un error por pantalla.
     
-    listaCheques()
+    nc = listaCheques()
     repetidos = []
     unicos = []
-    for x in lista:
+    for x in nc:
         if x not in unicos:
             unicos.append(x)
         elif x not in repetidos:
