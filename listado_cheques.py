@@ -5,7 +5,8 @@ import datetime
 #Se definen variables para filtrar las filas del archivo según distintos argumentos
 
 def buscarPorDniTipo():
-    #Filtra las filas del archivo por los argumentos dni y tipo de cheque.
+    #Devuelve una lista con los resultados de
+    #Filtrar las filas del archivo por los argumentos dni y tipo de cheque.
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
@@ -16,7 +17,8 @@ def buscarPorDniTipo():
         return resultado
 
 def buscarPorDniTipoEstado():
-    #Filtra las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.
+    #Devuelve una lista con los resultados de
+    #Filtrar las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
@@ -40,8 +42,9 @@ def cambiarFecha():
     return fechaSalida
 
 def buscarPorDniTipoFecha():
-    #Filtra las filas del archivo por los argumentos fecha, dni y tipo de cheque.
-    #cambia las fechas de formato string a timestamp
+    #Devuelve una lista con los resultados de
+    #Filtrar las filas del archivo por los argumentos fecha, dni y tipo de cheque.
+    #usa la funcion para tener la fecha ingresada en formato timestamp entero
     fechas = cambiarFecha()
     fechaUno = fechas[0]
     fechaDos = fechas[1]
@@ -56,7 +59,8 @@ def buscarPorDniTipoFecha():
     return resultado
 
 def buscarPorDniTipoEstadoFecha():
-    #Filtra las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
+    #Devuelve una lista con los resultados de
+    #Filtrar las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
     #cambia las fechas de formato string a timestamp
     fechas = cambiarFecha()
     fechaUno = fechas[0]
@@ -89,7 +93,8 @@ def chequeRepetido():
             print('Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
 
 def descargar():
-    #Guarda el header del archivo csv
+    #Crea una archivo csv con nombre <dni>-<timestampactual>.csv
+    #Guarda la primera linea del archivo csv
     with open(archivo, 'r') as mainFile:
         reader = csv.reader(mainFile)
         for fila in reader:
@@ -116,11 +121,13 @@ def tipoDeSalida(resultado):
         print('No hay resultados que cumplan esas condiciones...')
     #Imprime por pantalla las filas del resultado.
     elif salida == "PANTALLA":
+        #Revisa si hay algún cheque repetido.
         chequeRepetido()
         for fila in resultado:
             print(fila)
     #Descarga las filas en un nuevo archivo.
     elif salida == "CSV":
+        #Revisa si hay algún cheque repetido.
         chequeRepetido()
         print('Preparando archivo...')
         descargar()
