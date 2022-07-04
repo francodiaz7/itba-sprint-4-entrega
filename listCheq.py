@@ -76,6 +76,27 @@ def chequeRepetido():
         print('ERROR')
 '''
 
+def descargar():
+    #Guarda el header del archivo csv
+    with open(archivo, 'r') as mainFile:
+        reader = csv.reader(mainFile)
+        for fila in reader:
+            header = ((fila[6], fila[7], fila[5], fila[4]))
+            break
+    #Genera el nombre del archivo
+    fecha = datetime.datetime.now()
+    timestampActual = int(datetime.datetime.timestamp(fecha))
+    nuevoArchivo = ('{0}-{1}.csv'.format(dni,timestampActual))
+    #Filtra el resultado denuevo, para que solo queden ciertas columnas
+    nuevoResultado = []
+    with open(nuevoArchivo, 'w', newline='') as newFile:
+        writer = csv.writer(newFile)
+        writer.writerow(header)
+        for fila in resultado:
+            nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
+        writer.writerows(nuevoResultado)
+    print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
+
 def tipoDeSalida(resultado):
     if salida == "PANTALLA":
         if not resultado:
@@ -88,28 +109,11 @@ def tipoDeSalida(resultado):
             print('No hay resultados que cumplan esas condiciones...')
         else:
             print('Preparando archivo...')
-            #Guarda el header del archivo csv
-            with open(archivo, 'r') as mainFile:
-                reader = csv.reader(mainFile)
-                for fila in reader:
-                    header = ((fila[6], fila[7], fila[5], fila[4]))
-                    break
-            #Genera el nombre del archivo
-            fecha = datetime.datetime.now()
-            timestampActual = int(datetime.datetime.timestamp(fecha))
-            nuevoArchivo = ('{0}-{1}.csv'.format(dni,timestampActual))
-            #Filtra el resultado denuevo, para que solo queden ciertas columnas
-            nuevoResultado = []
-            with open(nuevoArchivo, 'w', newline='') as newFile:
-                writer = csv.writer(newFile)
-                writer.writerow(header)
-                for fila in resultado:
-                    nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
-                writer.writerows(nuevoResultado)
+            descargar()
     else:
         print('Tipo de salida no reconocido.')
 
-#Aca empieza el codigo y la lógica.
+#Aca empieza la lógica del script.
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
