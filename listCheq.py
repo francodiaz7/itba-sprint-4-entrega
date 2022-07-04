@@ -71,17 +71,18 @@ def descargar():
         for fila in reader:
             header = ((fila[6], fila[7], fila[5], fila[4]))
             break
+    #Filtra el resultado denuevo, para que solo queden ciertas columnas
+    nuevoResultado = []
+    for fila in resultado:
+            nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
     #Genera el nombre del archivo
     fecha = datetime.datetime.now()
     timestampActual = int(datetime.datetime.timestamp(fecha))
     nuevoArchivo = ('{0}-{1}.csv'.format(dni,timestampActual))
-    #Filtra el resultado denuevo, para que solo queden ciertas columnas
-    nuevoResultado = []
+    #Escribe el header y resultado en un nuevo archivo
     with open(nuevoArchivo, 'w', newline='') as newFile:
         writer = csv.writer(newFile)
         writer.writerow(header)
-        for fila in resultado:
-            nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
         writer.writerows(nuevoResultado)
     print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
