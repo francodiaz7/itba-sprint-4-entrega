@@ -79,19 +79,27 @@ def chequeRepetido():
 def tipoDeSalida(resultado):
     if salida == "PANTALLA":
         for row in resultado:
-            print(row[:10])
+            print(row)
     elif salida == "CSV":
         print('Preparando archivo...')
-        """
-        csv_file = csv.reader(open(archivo, 'r'))
-        with open('<DNI><TIMESTAMP>.csv', 'w') as csvfile:
-            datos = ['nro_cuenta', 'start_date', 'end_date', 'valor_cheque']
-            writer = csv.DictWriter(csvfile, datos = datos)
-
-            writer.writeheader()
-            for row in cvs_file:
-                writer.writerow('nro_cuenta': row[5], 'start_date': row[7], 'end_date': datetime.now(), 'valor_cheque': row[6])
-        """
+        #Guarda el header del archivo csv
+        with open(archivo, 'r') as mainFile:
+            reader = csv.reader(mainFile)
+            for fila in reader:
+                header = ((fila[6], fila[7], fila[5], fila[4]))
+                break
+        #Genera el nombre del archivo
+        fecha = datetime.datetime.now()
+        timestampActual = int(datetime.datetime.timestamp(fecha))
+        nuevoArchivo = ('{0}-{1}.csv'.format(dni,timestampActual))
+        #Filtra el resultado denuevo, para que solo queden ciertas columnas
+        nuevoResultado = []
+        with open(nuevoArchivo, 'w', newline='') as newFile:
+            writer = csv.writer(newFile)
+            writer.writerow(header)
+            for fila in resultado:
+                nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
+            writer.writerows(nuevoResultado)
     else:
         print('Tipo de salida no reconocido.')
 
