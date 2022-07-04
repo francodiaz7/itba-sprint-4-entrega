@@ -2,91 +2,142 @@ import csv
 import sys
 import datetime
 
-def salidaPorPantalla(tipoDeSalida):
-    csv_salida = tipoDeSalida
-    csv_file = csv.reader(open(archivo, 'r'))
-    if csv_salida == "PANTALLA":
-        for row in csv_file:
-            if dni==row[8] and tipoCheque==row[9]:
-                print(row[:10])
-            elif dni==row[8] and tipoCheque!=row[9]:
-                print("Error! El tipo de cheque es incorrecto.")
+#Se definen variables para filtrar las filas del archivo según distintos argumentos
 
-def salidaPorCsv(tipoDeSalida,dniCliente):
-    fechaActual = datetime.datetime.now()
-    fechaActualFormato = datetime.datetime.strftime(fechaActual, '%d %m %Y  %Hhs %Mmin %Sseg')
-    dni= dniCliente
-    nombreDeArchivocsv= str("DNI "+dni+" "+fechaActualFormato)
-    resultado=[]
-    csv_salida = tipoDeSalida
-    csv_file = csv.reader(open(archivo, 'r'))
-    for row in csv_file:
-        if dni==row[8] and tipoCheque==row[9]:
-            resultado.append(row)
-    return resultado
+def buscarPorDniTipo():
+    #Filtra las filas del archivo por los argumentos dni y tipo de cheque.
+    resultado = []
+    with open(archivo, 'r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader, None)
+        for fila in reader:
+            if dni==fila[8] and tipoCheque==fila[9]:
+                resultado.append(fila)
+        return resultado
 
 def buscarPorDniTipoEstado():
+    #Filtra las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.
     resultado = []
-    csv_file = csv.reader(open(archivo, 'r'))
-    for row in csv_file:
-        if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
-            resultado.append(row)
-    return resultado
-
-#Está incompleta, la fecha en el archivo csv está guardada en segundos.
-#abajo del todo hay un ejemplo de como usar datetime
+    with open(archivo, 'r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader, None)
+        for fila in reader:
+            if dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
+                resultado.append(fila)
+        return resultado
 
 def buscarPorDniTipoEstadoFecha():
+    #Filtra las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
+    #cambia las fechas de formato string a timestamp
+    fechasIngresadas = rangoFecha.split(':')
+    fechaSalida = []
+    for fecha in fechasIngresadas:
+        formatoFecha = datetime.datetime.strptime(fecha, '%d-%m-%Y')
+        timestamp = int(datetime.datetime.timestamp(formatoFecha))
+        fechaSalida.append(timestamp)
+    fechaUno = fechaSalida[0]
+    fechaDos = fechaSalida[1]
+    #filtra las filas
     resultado = []
-    csv_file = csv.reader(open(archivo, 'r'))
-    for row in csv_file:
-        ''' EJEMPLO CÓDIGO FECHAS USANDO TIMESTAMP
-         ts_now = time.time()
-         dt_now = datetime.fromtimestamp(ts_now)
-        '''
-
-        #creo que acá hay que buscar el estado del cheque para la fecha actual, no sé si me equivoco
-        if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
-            resultado.append(row)
+    with open(archivo, 'r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader, None)
+        for fila in reader:
+            if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
+                resultado.append(fila)
     return resultado
 
+def chequeRepetido():
+    #La funcion busca si dentro del resultado hay un cheque repetido.
+    #Si hay alguno imprime error por pantalla indicando el número de cheque.
+    repetidos = []
+    unicos = []
+    for fila in resultado:
+        cheque = fila[0]
+        if cheque not in unicos:
+            unicos.append(cheque)
+        elif cheque not in repetidos:
+            repetidos.append(cheque)
+    if len(repetidos) == 0:
+        return False
+    else:
+        for error in repetidos:
+            print('Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
 
-#Falta la opción para crear un archivo CSV
+def descargar():
+    #Guarda el header del archivo csv
+    with open(archivo, 'r') as mainFile:
+        reader = csv.reader(mainFile)
+        for fila in reader:
+            header = ((fila[6], fila[7], fila[5], fila[4]))
+            break
+    #Filtra el resultado denuevo, para que solo queden ciertas columnas
+    nuevoResultado = []
+    for fila in resultado:
+            nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
+    #Genera el nombre del archivo
+    fecha = datetime.datetime.now()
+    timestampActual = int(datetime.datetime.timestamp(fecha))
+    nuevoArchivo = ('{0}-{1}.csv'.format(dni,timestampActual))
+    #Escribe el header y resultado en un nuevo archivo
+    with open(nuevoArchivo, 'w', newline='') as newFile:
+        writer = csv.writer(newFile)
+        writer.writerow(header)
+        writer.writerows(nuevoResultado)
+    print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
 def tipoDeSalida(resultado):
-    if salida == "PANTALLA":
-        print(resultado)
+    #Si el resultado está vacio imprime un mensaje por pantalla.
+    if not resultado:
+        print('No hay resultados que cumplan esas condiciones...')
+    #Imprime por pantalla las filas del resultado.
+    elif salida == "PANTALLA":
+        chequeRepetido()
+        for fila in resultado:
+            print(fila)
+    #Descarga las filas en un nuevo archivo.
     elif salida == "CSV":
+        chequeRepetido()
         print('Preparando archivo...')
-        """
-        csv_file = csv.reader(open(archivo, 'r'))
-        with open('<DNI><TIMESTAMP>.csv', 'w') as csvfile:
-            datos = ['nro_cuenta', 'start_date', 'end_date', 'valor_cheque']
-            writer = csv.DictWriter(csvfile, datos = datos)
-
-            writer.writeheader()
-            for row in cvs_file:
-                writer.writerow('nro_cuenta': row[5], 'start_date': row[7], 'end_date': datetime.now(), 'valor_cheque': row[6])
-        """
+        descargar()
     else:
         print('Tipo de salida no reconocido.')
 
-#Aca empieza el codigo y la lógica.
-
+#Aca empieza la lógica del script.
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print("Es obligatorio colocar al menos cuatro argumentos")
-        print("-Debes ingresar primero el nombre del archivo csv.\n-Despues el DNI del cliente.\n-Despues la forma de salida que puede ser: PANTALLA O CSV.\n-Despues el tipo de cheque que puede ser: EMITIDO O DEPOSITADO\n Ejemplo: test.csv 42180335 PANTALLA EMITIDO ")
+        print("El orden de los argumentos son los siguientes:\
+        \n  a. Nombre del archivo csv.\
+        \n  b. DNI del cliente donde se filtraran.\
+        \n  c. Salida: PANTALLA o CSV.\
+        \n  d. Tipo de cheque: EMITIDO o DEPOSITADO.\
+        \n  e. Estado del cheque: PENDIENTE, APROBADO, RECHAZADO. (Opcional)\
+        \n  f. Rango fecha: xx-xx-xxxx:yy-yy-yyyy. (Opcional)\
+        \nEjemplo: >python listado_cheques.py test.csv 42180335 PANTALLA EMITIDO")
 
-    if len(sys.argv) == 5:
+    #Guarda los valores de los argumentos ingresados por consola.
+    if len(sys.argv) >= 5:
         archivo = sys.argv[1]
         dni = sys.argv[2]
         salida = sys.argv[3]
         tipoCheque = sys.argv[4]
-        print(archivo, dni, salida, tipoCheque)
-        salidaPorPantalla(salida)
-        salidaPorCsv(salida,dni)
 
-    if 2 == 1: # Argumentos opcionales
+    if len(sys.argv) == 5:
+        resultado = buscarPorDniTipo()
+        tipoDeSalida(resultado)
+
+    if len(sys.argv) == 6:
+        arg = sys.argv[5]
+        if arg == "PENDIENTE" or arg == "APROBADO" or arg == "RECHAZADO":
+            estadoCheque = sys.argv[5]
+        else:
+            rangoFecha = sys.argv[5]
+        resultado = buscarPorDniTipoEstado()
+        tipoDeSalida(resultado)
+
+    if len(sys.argv) == 7:
         estadoCheque = sys.argv[5]
         rangoFecha = sys.argv[6]
+        resultado = buscarPorDniTipoEstadoFecha()
+        tipoDeSalida(resultado)
