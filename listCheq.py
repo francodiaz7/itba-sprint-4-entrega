@@ -3,9 +3,10 @@ import sys
 import datetime
 import time
 
-#Se define variables para filtrar el archivo según distintos argumentos
+#Se definen variables para filtrar las filas del archivo según distintos argumentos
 
 def buscarPorDniTipo():
+    #Filtra las filas del archivo por los argumentos dni y tipo de cheque.
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
@@ -16,6 +17,7 @@ def buscarPorDniTipo():
         return resultado
 
 def buscarPorDniTipoEstado():
+    #Filtra las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
@@ -26,7 +28,8 @@ def buscarPorDniTipoEstado():
         return resultado
 
 def buscarPorDniTipoEstadoFecha():
-    # procesa las fechas
+    #Filtra las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
+    #cambia las fechas de formato string a timestamp
     fechasIngresadas = rangoFecha.split(':')
     fechaSalida = []
     for fecha in fechasIngresadas:
@@ -98,12 +101,14 @@ def descargar():
     print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
 def tipoDeSalida(resultado):
+    #Si el resultado no está vacio imprime por pantalla las filas.
     if salida == "PANTALLA":
         if not resultado:
             print('No hay resultados que cumplan esas condiciones...')
         else:
             for fila in resultado:
                 print(fila)
+    #Si el resultado no está vacio descarga las filas.
     elif salida == "CSV":
         if not resultado:
             print('No hay resultados que cumplan esas condiciones...')
@@ -114,13 +119,12 @@ def tipoDeSalida(resultado):
         print('Tipo de salida no reconocido.')
 
 #Aca empieza la lógica del script.
-
 if __name__ == '__main__':
     if len(sys.argv) < 5:
         print("Es obligatorio colocar al menos cuatro argumentos")
         print("-Debes ingresar primero el nombre del archivo csv.\n-Despues el DNI del cliente.\n-Despues la forma de salida que puede ser: PANTALLA O CSV.\n-Despues el tipo de cheque que puede ser: EMITIDO O DEPOSITADO\n Ejemplo: test.csv 42180335 PANTALLA EMITIDO ")
 
-    #Guarda los valores de los argumentos
+    #Guarda los valores de los argumentos ingresados por consola.
     if len(sys.argv) >= 5:
         archivo = sys.argv[1]
         dni = sys.argv[2]
