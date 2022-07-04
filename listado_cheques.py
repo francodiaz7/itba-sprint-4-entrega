@@ -26,17 +26,25 @@ def buscarPorDniTipoEstado():
                 resultado.append(fila)
         return resultado
 
-def buscarPorDniTipoFecha():
-    #Filtra las filas del archivo por los argumentos fecha, dni y tipo de cheque.
+def cambiarFecha():
     #cambia las fechas de formato string a timestamp
+    #Separa las fechas
     fechasIngresadas = rangoFecha.split(':')
     fechaSalida = []
     for fecha in fechasIngresadas:
+        #Cambia formato string a formato fecha
         formatoFecha = datetime.datetime.strptime(fecha, '%d-%m-%Y')
+        #Cambia formato fecha a timestamp en segundos enteros
         timestamp = int(datetime.datetime.timestamp(formatoFecha))
         fechaSalida.append(timestamp)
-    fechaUno = fechaSalida[0]
-    fechaDos = fechaSalida[1]
+    return fechaSalida
+
+def buscarPorDniTipoFecha():
+    #Filtra las filas del archivo por los argumentos fecha, dni y tipo de cheque.
+    #cambia las fechas de formato string a timestamp
+    fechas = cambiarFecha()
+    fechaUno = fechas[0]
+    fechaDos = fechas[1]
     #filtra las filas
     resultado = []
     with open(archivo, 'r') as file:
@@ -50,14 +58,9 @@ def buscarPorDniTipoFecha():
 def buscarPorDniTipoEstadoFecha():
     #Filtra las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
     #cambia las fechas de formato string a timestamp
-    fechasIngresadas = rangoFecha.split(':')
-    fechaSalida = []
-    for fecha in fechasIngresadas:
-        formatoFecha = datetime.datetime.strptime(fecha, '%d-%m-%Y')
-        timestamp = int(datetime.datetime.timestamp(formatoFecha))
-        fechaSalida.append(timestamp)
-    fechaUno = fechaSalida[0]
-    fechaDos = fechaSalida[1]
+    fechas = cambiarFecha()
+    fechaUno = fechas[0]
+    fechaDos = fechas[1]
     #filtra las filas
     resultado = []
     with open(archivo, 'r', newline='') as file:
