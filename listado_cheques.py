@@ -5,32 +5,35 @@ import datetime
 #Se definen variables para filtrar las filas del archivo según distintos argumentos
 
 def buscarPorDniTipo():
-    #Devuelve una lista con los resultados de
-    #Filtrar las filas del archivo por los argumentos dni y tipo de cheque.
+    '''Devuelve una lista con los resultados de filtrar 
+    las filas del archivo por los argumentos dni y tipo de cheque.'''
+    
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
-        next(reader, None)
+        resultado.append(next(reader, None))
         for fila in reader:
             if dni==fila[8] and tipoCheque==fila[9]:
                 resultado.append(fila)
     return resultado
 
 def buscarPorDniTipoEstado():
-    #Devuelve una lista con los resultados de
-    #Filtrar las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.
+    '''Devuelve una lista con los resultados de filtrar 
+    las filas del archivo por los argumentos dni, tipo de cheque y estado de cheque.'''
+    
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
-        next(reader, None)
+        resultado.append(next(reader, None))
         for fila in reader:
             if dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
                 resultado.append(fila)
     return resultado
 
 def cambiarFecha():
-    #cambia las fechas de formato string a timestamp
-    #Separa las fechas
+    '''Cambia las fechas de formato string a timestamp, 
+    además separa las fechas'''
+
     fechasIngresadas = rangoFecha.split(':')
     fechaSalida = []
     for fecha in fechasIngresadas:
@@ -42,9 +45,10 @@ def cambiarFecha():
     return fechaSalida
 
 def buscarPorDniTipoFecha():
-    #Devuelve una lista con los resultados de
-    #Filtrar las filas del archivo por los argumentos fecha, dni y tipo de cheque.
-    #usa la funcion para tener la fecha ingresada en formato timestamp entero
+    ''' Devuelve una lista con los resultados de filtrar las filas 
+    del archivo por los argumentos fecha, dni y tipo de cheque.
+    Usa la funcion para tener la fecha ingresada en formato timestamp entero.'''
+    
     fechas = cambiarFecha()
     fechaUno = fechas[0]
     fechaDos = fechas[1]
@@ -52,16 +56,17 @@ def buscarPorDniTipoFecha():
     resultado = []
     with open(archivo, 'r') as file:
         reader = csv.reader(file)
-        next(reader, None)
+        resultado.append(next(reader, None))
         for fila in reader:
             if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9]:
                 resultado.append(fila)
     return resultado
 
 def buscarPorDniTipoEstadoFecha():
-    #Devuelve una lista con los resultados de
-    #Filtrar las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
-    #cambia las fechas de formato string a timestamp
+    '''Devuelve una lista con los resultados de
+    filtrar las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
+    Cambia las fechas de formato string a timestamp.'''
+
     fechas = cambiarFecha()
     fechaUno = fechas[0]
     fechaDos = fechas[1]
@@ -76,8 +81,9 @@ def buscarPorDniTipoEstadoFecha():
     return resultado
 
 def chequeRepetido():
-    #La funcion busca si dentro del resultado hay un cheque repetido.
-    #Si hay alguno imprime error por pantalla indicando el número de cheque.
+    '''La función busca si dentro del resultado hay un cheque repetido.
+    Si hay alguno imprime error por pantalla indicando el número de cheque.'''
+    
     repetidos = []
     unicos = []
     for fila in resultado:
@@ -90,11 +96,12 @@ def chequeRepetido():
         return False
     else:
         for error in repetidos:
-            print('Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
+            print(f'Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
 
 def descargar():
-    #Crea una archivo csv con nombre <dni>-<timestampactual>.csv
-    #Guarda la primera linea del archivo csv
+    '''Crea una archivo csv con nombre <dni>-<timestampactual>.csv
+    Guarda la primera linea del archivo csv'''
+
     with open(archivo, 'r') as mainFile:
         reader = csv.reader(mainFile)
         for fila in reader:
@@ -116,7 +123,9 @@ def descargar():
     print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
 def tipoDeSalida(resultado):
-    #Si el resultado está vacio imprime un mensaje por pantalla.
+    '''Si el resultado está vacio imprime un mensaje por pantalla.
+    El resultado se muestra en un .csv o en pantalla'''
+
     if not resultado:
         print('No hay resultados que cumplan esas condiciones...')
     #Imprime por pantalla las filas del resultado.
