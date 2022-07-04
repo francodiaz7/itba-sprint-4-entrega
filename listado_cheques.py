@@ -26,6 +26,27 @@ def buscarPorDniTipoEstado():
                 resultado.append(fila)
         return resultado
 
+def buscarPorDniTipoFecha():
+    #Filtra las filas del archivo por los argumentos fecha, dni y tipo de cheque.
+    #cambia las fechas de formato string a timestamp
+    fechasIngresadas = rangoFecha.split(':')
+    fechaSalida = []
+    for fecha in fechasIngresadas:
+        formatoFecha = datetime.datetime.strptime(fecha, '%d-%m-%Y')
+        timestamp = int(datetime.datetime.timestamp(formatoFecha))
+        fechaSalida.append(timestamp)
+    fechaUno = fechaSalida[0]
+    fechaDos = fechaSalida[1]
+    #filtra las filas
+    resultado = []
+    with open(archivo, 'r') as file:
+        reader = csv.reader(file)
+        next(reader, None)
+        for fila in reader:
+            if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9]:
+                resultado.append(fila)
+    return resultado
+
 def buscarPorDniTipoEstadoFecha():
     #Filtra las filas del archivo por los argumentos fecha, dni, tipo de cheque y estado de cheque.
     #cambia las fechas de formato string a timestamp
@@ -131,9 +152,10 @@ if __name__ == '__main__':
         arg = sys.argv[5]
         if arg == "PENDIENTE" or arg == "APROBADO" or arg == "RECHAZADO":
             estadoCheque = sys.argv[5]
+            resultado = buscarPorDniTipoEstado()
         else:
             rangoFecha = sys.argv[5]
-        resultado = buscarPorDniTipoEstado()
+            resultado = buscarPorDniTipoFecha()
         tipoDeSalida(resultado)
 
     if len(sys.argv) == 7:
