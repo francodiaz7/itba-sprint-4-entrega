@@ -101,20 +101,17 @@ def descargar():
     print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
 def tipoDeSalida(resultado):
-    #Si el resultado no está vacio imprime por pantalla las filas.
-    if salida == "PANTALLA":
-        if not resultado:
-            print('No hay resultados que cumplan esas condiciones...')
-        else:
-            for fila in resultado:
-                print(fila)
-    #Si el resultado no está vacio descarga las filas.
+    #Si el resultado está vacio imprime un mensaje por pantalla.
+    if not resultado:
+        print('No hay resultados que cumplan esas condiciones...')
+    #Imprime por pantalla las filas del resultado.
+    elif salida == "PANTALLA":
+        for fila in resultado:
+            print(fila)
+    #Descarga las filas en un nuevo archivo.
     elif salida == "CSV":
-        if not resultado:
-            print('No hay resultados que cumplan esas condiciones...')
-        else:
-            print('Preparando archivo...')
-            descargar()
+        print('Preparando archivo...')
+        descargar()
     else:
         print('Tipo de salida no reconocido.')
 
