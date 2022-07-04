@@ -1,7 +1,6 @@
 import csv
 import sys
 import datetime
-import time
 
 #Se definen variables para filtrar las filas del archivo según distintos argumentos
 
