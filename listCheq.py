@@ -26,19 +26,23 @@ def buscarPorDniTipoEstado():
         return resultado
 
 def buscarPorDniTipoEstadoFecha():
+    # procesa las fechas
+    fechasIngresadas = rangoFecha.split(':')
+    fechaSalida = []
+    for fecha in fechasIngresadas:
+        formatoFecha = datetime.datetime.strptime(fecha, '%d-%m-%Y')
+        timestamp = int(datetime.datetime.timestamp(formatoFecha))
+        fechaSalida.append(timestamp)
+    fechaUno = fechaSalida[0]
+    fechaDos = fechaSalida[1]
+    #filtra las filas
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
         next(reader, None)
         for row in reader:
-            ''' EJEMPLO CÓDIGO FECHAS USANDO TIMESTAMP
-            ts_now = time.time()
-            dt_now = datetime.fromtimestamp(ts_now)
-            '''
-
-        #creo que acá hay que buscar el estado del cheque para la fecha actual, no sé si me equivoco
-        if dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
-            resultado.append(row)
+            if fechaUno<row[6] and fechaDos>row[7] and dni==row[8] and tipoCheque==row[9] and estadoCheque==row[10]:
+                resultado.append(row)
     return resultado
 
 ''' ITEM 3 VERIFICAR CODIGO
