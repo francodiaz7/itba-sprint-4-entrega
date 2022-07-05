@@ -58,7 +58,7 @@ def buscarPorDniTipoFecha():
         reader = csv.reader(file)
         resultado.append(next(reader, None))
         for fila in reader:
-            if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9]:
+            if fechaUno<int(fila[6]) and fechaDos>int(fila[6]) and dni==fila[8] and tipoCheque==fila[9]:
                 resultado.append(fila)
     return resultado
 
@@ -74,9 +74,9 @@ def buscarPorDniTipoEstadoFecha():
     resultado = []
     with open(archivo, 'r', newline='') as file:
         reader = csv.reader(file)
-        next(reader, None)
+        resultado.append(next(reader, None))
         for fila in reader:
-            if fechaUno<int(fila[6]) and fechaDos>int(fila[7]) and dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
+            if fechaUno<int(fila[6]) and fechaDos>int(fila[6]) and dni==fila[8] and tipoCheque==fila[9] and estadoCheque==fila[10]:
                 resultado.append(fila)
     return resultado
 
@@ -96,21 +96,15 @@ def chequeRepetido():
         return False
     else:
         for error in repetidos:
-            print(f'Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
+            print('Error, el cheque número {0} del DNI {1} está repetido.'.format(error, dni))
 
 def descargar():
     '''Crea una archivo csv con nombre <dni>-<timestampactual>.csv
     Guarda la primera linea del archivo csv'''
-
-    with open(archivo, 'r') as mainFile:
-        reader = csv.reader(mainFile)
-        for fila in reader:
-            header = ((fila[6], fila[7], fila[5], fila[4]))
-            break
     #Filtra el resultado denuevo, para que solo queden ciertas columnas
     nuevoResultado = []
     for fila in resultado:
-            nuevoResultado.append((fila[6], fila[7], fila[5], fila[4]))
+        nuevoResultado.append((fila[3], fila[5], fila[6], fila[7]))
     #Genera el nombre del archivo
     fecha = datetime.datetime.now()
     timestampActual = int(datetime.datetime.timestamp(fecha))
@@ -118,15 +112,13 @@ def descargar():
     #Escribe el header y resultado en un nuevo archivo
     with open(nuevoArchivo, 'w', newline='') as newFile:
         writer = csv.writer(newFile)
-        writer.writerow(header)
         writer.writerows(nuevoResultado)
     print('Archivo descargado con nombre: "{0}"'.format(nuevoArchivo))
 
 def tipoDeSalida(resultado):
     '''Si el resultado está vacio imprime un mensaje por pantalla.
     El resultado se muestra en un .csv o en pantalla'''
-
-    if not resultado:
+    if len(resultado) == 1:
         print('No hay resultados que cumplan esas condiciones...')
     #Imprime por pantalla las filas del resultado.
     elif salida == "PANTALLA":
