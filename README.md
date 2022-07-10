@@ -12,7 +12,7 @@
 | :-: | :-----------------------------: | :----------------------: |
 |  0  |        Ceretti Sebastian        |      [lexer616][0]       |
 |  1  |       Diaz Franco Agustín       |     [francodiaz7][1]     |
-|  2  | Lopez Gutierrez Daniel Benjamin | [DanielBenjaminLopez][2] |
+|  2  |     Lopez Gutierrez Daniel B.   | [DanielBenjaminLopez][2] |
 |  3  |          Molina Elias           |      [Elias-m7][3]       |
 |  4  |      Vargas Laura Nazarena      |      [lauranv28][4]      |
 |  5  |        Zavala Valentina         |        [VLZ23][5]        |
